@@ -15,5 +15,5 @@ func main() {
 	}
 	defer db.Close()
 
-	fmt.Println("Book inserted successfully!")
+	fmt.Println("Mysql connect successfully!")
 }
