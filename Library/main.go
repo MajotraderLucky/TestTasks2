@@ -15,5 +15,11 @@ func main() {
 	}
 	defer db.Close()
 
-	fmt.Println("Mysql connect successfully!")
+	err = db.Ping()
+	if err != nil {
+		fmt.Println("Failed to ping database:", err)
+		return
+	}
+
+	fmt.Println("Database connection successful!")
 }
