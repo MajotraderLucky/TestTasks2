@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	db, err := sql.Open("mysql", "root:Kvado2023@tcp(0.0.0.0:3306)/librarydb")
+	db, err := sql.Open("mysql", "root:my-secret-pw@tcp(localhost:3306)/librarydb")
 	if err != nil {
 		fmt.Println("Failed to connect to database:", err)
 		return
