@@ -3,7 +3,7 @@ module newlibrary
 go 1.20
 
 require (
-	github.com/MajotraderLucky/TestTasks2 v0.0.0-20230731035653-3e7adbc34f75 // indirect
+	github.com/MajotraderLucky/TestTasks2 v0.0.0-20230731040952-ef7058a5e12f // indirect
 	github.com/go-sql-driver/mysql v1.7.1 // indirect
 	github.com/golang/protobuf v1.5.3 // indirect
 	golang.org/x/net v0.9.0 // indirect
