@@ -17,6 +17,9 @@ services:
       - 8080:8080
     depends_on:
       - db
+    restart: always
+    volumes:
+      - /home/ryazanov/Development/TestTasks/LibraryCompose/logs:/app/logs
 
 volumes:
   db_data:
