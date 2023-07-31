@@ -7,6 +7,7 @@ import (
 	"log"
 	"net"
 
+	pb "github.com/MajotraderLucky/TestTasks2/Repo/protobuf"
 	_ "github.com/go-sql-driver/mysql"
 	"google.golang.org/grpc"
 )
