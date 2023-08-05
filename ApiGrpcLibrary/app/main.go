@@ -2,12 +2,22 @@ package main
 
 import (
 	"database/sql"
+	"encoding/json"
 	"log"
 	"os"
 	"strings"
 
 	_ "github.com/go-sql-driver/mysql"
 )
+
+type Author struct {
+	Name  string   `json:"name"`
+	Books []string `json:"books"`
+}
+
+type Book struct {
+	Title string `json:"title"`
+}
 
 func main() {
 	// Создание директории logs, если она не существует
@@ -98,6 +108,8 @@ func main() {
 		log.Println("Таблица authors пустая")
 	}
 
+	log.Println("Data added")
+
 	// Чтение данных и запись их в лог
 	for rows.Next() {
 		// Чтение значений строки
@@ -146,5 +158,42 @@ func main() {
 
 	if err = rows.Err(); err != nil {
 		log.Fatal(err)
+	}
+
+	// Чтение содержимого файла
+	file, err := os.ReadFile("books.json")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// Преобразование содержимого файла в массив структур Author
+	var authors []Author
+	err = json.Unmarshal(file, &authors)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	for _, author := range authors {
+		// Выполнение операции вставки записи в таблицу authors
+		_, err := db.Exec("INSERT INTO authors (name) VALUES (?)", author.Name)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		// Получение ID последней вставленной записи
+		var authorID int64
+		err = db.QueryRow("SELECT LAST_INSERT_ID()").Scan(&authorID)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		// Вставка данных в таблицу books
+		for _, book := range author.Books {
+			// Выполнение операции вставки записи в таблицу books
+			_, err := db.Exec("INSERT INTO books (title, author_id) VALUES (?, ?)", book, authorID)
+			if err != nil {
+				log.Fatal(err)
+			}
+		}
 	}
 }
