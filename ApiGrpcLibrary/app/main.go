@@ -2,9 +2,9 @@ package main
 
 import (
 	"database/sql"
-	"fmt"
 	"log"
 	"os"
+	"strings"
 
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -16,13 +16,15 @@ func main() {
 		log.Fatal(err)
 	}
 
-	// Создание файла log.txt и запись в него текста
-	err = os.WriteFile("logs/log.txt", []byte("Hello, logs!\n"), 0644)
+	// Открытие файла log.txt в режиме добавления и запись в него текста
+	logFile, err := os.OpenFile("logs/log.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
 		log.Fatal(err)
 	}
+	defer logFile.Close()
 
-	fmt.Println("File log.txt created and text written successfully.")
+	// Установка логгера для вывода в файл
+	log.SetOutput(logFile)
 
 	db, err := sql.Open("mysql", "myuser:mypassword@tcp(db:3306)/mydb")
 	if err != nil {
@@ -30,23 +32,35 @@ func main() {
 	}
 	defer db.Close()
 
-	rows, err := db.Query("SHOW TABLES")
+	// Пинг базы данных
+	err = db.Ping()
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer rows.Close()
 
-	var tableName string
-	for rows.Next() {
-		err := rows.Scan(&tableName)
+	log.Println("Database connection successful")
+
+	// Чтение содержимого файла log.txt
+	data, err := os.ReadFile("logs/log.txt")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// Разделение содержимого на строки
+	lines := strings.Split(string(data), "\n")
+
+	// Проверка количества строк
+	if len(lines) > 50 {
+		// Открытие файла log.txt в режиме перезаписи
+		logFile, err := os.OpenFile("logs/log.txt", os.O_TRUNC|os.O_CREATE|os.O_WRONLY, 0644)
 		if err != nil {
 			log.Fatal(err)
 		}
-		fmt.Println(tableName)
-	}
+		defer logFile.Close()
 
-	err = rows.Err()
-	if err != nil {
-		log.Fatal(err)
+		// Запись последних 50 строк в файл
+		for _, line := range lines[len(lines)-50:] {
+			logFile.WriteString(line + "\n")
+		}
 	}
 }

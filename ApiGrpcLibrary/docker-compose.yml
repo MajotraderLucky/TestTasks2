@@ -21,6 +21,8 @@ services:
       - db
     volumes:
       - ./logs:/app/logs
+    environment:
+      - TZ=Europe/Moscow
     networks:
       - mynetwork
 

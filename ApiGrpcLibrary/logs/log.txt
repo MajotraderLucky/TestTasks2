@@ -1,1 +1,18 @@
 Hello, logs!
+2023/08/05 08:48:52 authors
+2023/08/05 08:48:52 books
+2023/08/05 09:56:43 authors
+2023/08/05 09:56:43 books
+2023/08/05 09:56:43 json: cannot unmarshal object into Go value of type []main.Author
+2023/08/05 10:05:38 authors
+2023/08/05 10:05:38 books
+2023/08/05 10:05:38 json: cannot unmarshal object into Go value of type []main.Author
+2023/08/05 10:24:50 authors
+2023/08/05 10:24:50 books
+2023/08/05 10:24:50 json: cannot unmarshal object into Go value of type []main.Author
+2023/08/05 10:48:15 authors
+2023/08/05 10:48:15 books
+2023/08/05 10:48:15 json: cannot unmarshal object into Go value of type []main.Author
+2023/08/05 10:57:57 Database connection successful
+2023/08/05 14:04:18 Database connection successful
+2023/08/05 14:17:44 Database connection successful
