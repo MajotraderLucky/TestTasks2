@@ -3,7 +3,6 @@ package main
 import (
 	"database/sql"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"os"
 
@@ -11,8 +10,6 @@ import (
 )
 
 func main() {
-	fmt.Println("Hello, world!")
-
 	// Создание директории logs, если она не существует
 	err := os.MkdirAll("logs", 0755)
 	if err != nil {
@@ -20,7 +17,7 @@ func main() {
 	}
 
 	// Создание файла log.txt и запись в него текста
-	err = ioutil.WriteFile("logs/log.txt", []byte("Hello, logs!\n"), 0644)
+	err = os.WriteFile("logs/log.txt", []byte("Hello, logs!\n"), 0644)
 	if err != nil {
 		log.Fatal(err)
 	}
