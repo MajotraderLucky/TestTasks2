@@ -84,4 +84,67 @@ func main() {
 	if err = rows.Err(); err != nil {
 		log.Fatal(err)
 	}
+
+	// Выполнение запроса SELECT * FROM authors
+	query := "SELECT * FROM authors"
+	rows, err = db.Query(query)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer rows.Close()
+
+	// Проверка наличия данных в таблице
+	if !rows.Next() {
+		log.Println("Таблица authors пустая")
+	}
+
+	// Чтение данных и запись их в лог
+	for rows.Next() {
+		// Чтение значений строки
+		var id int
+		var name string
+		err := rows.Scan(&id, &name)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		// Запись значений в лог
+		log.Println("Data:", id, name)
+	}
+
+	if err = rows.Err(); err != nil {
+		log.Fatal(err)
+	}
+
+	// Выполнение запроса SELECT * FROM books
+	query = "SELECT * FROM books"
+	rows, err = db.Query(query)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer rows.Close()
+
+	// Проверка наличия данных в таблице
+	if !rows.Next() {
+		log.Println("Таблица books пустая")
+	}
+
+	// Чтение данных и запись их в лог
+	for rows.Next() {
+		// Чтение значений строки
+		var id int
+		var title string
+		var authorID int
+		err := rows.Scan(&id, &title, &authorID)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		// Запись значений в лог
+		log.Println("Data:", id, title, authorID)
+	}
+
+	if err = rows.Err(); err != nil {
+		log.Fatal(err)
+	}
 }

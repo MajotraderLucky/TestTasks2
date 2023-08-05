@@ -19,3 +19,7 @@ Hello, logs!
 2023/08/05 15:42:01 Database connection successful
 2023/08/05 15:42:01 There are tables in the mydb databases: authors
 2023/08/05 15:42:01 There are tables in the mydb databases: books
+2023/08/05 15:58:32 Database connection successful
+2023/08/05 15:58:32 There are tables in the mydb databases: authors
+2023/08/05 15:58:32 There are tables in the mydb databases: books
+2023/08/05 15:58:32 Таблица authors пустая
