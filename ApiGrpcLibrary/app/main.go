@@ -33,25 +33,23 @@ func main() {
 	}
 	defer db.Close()
 
-	err = db.Ping()
+	rows, err := db.Query("SHOW TABLES")
 	if err != nil {
 		log.Fatal(err)
 	}
+	defer rows.Close()
 
-	// Чтение содержимого файла log.txt
-	content, err := ioutil.ReadFile("logs/log.txt")
+	var tableName string
+	for rows.Next() {
+		err := rows.Scan(&tableName)
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Println(tableName)
+	}
+
+	err = rows.Err()
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	// Добавление новой строки к содержимому файла
-	content = append(content, []byte("Successfully connected to the database!\n")...)
-
-	// Запись обновленного содержимого обратно в файл
-	err = ioutil.WriteFile("logs/log.txt", content, 0644)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	fmt.Println("Successfully connected to the database!")
 }

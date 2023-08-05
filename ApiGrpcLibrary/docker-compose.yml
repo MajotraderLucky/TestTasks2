@@ -8,6 +8,8 @@ services:
       - 3306:3306
     volumes:
       - db_data:/var/lib/mysql
+    networks:
+      - mynetwork
 
   app:
     build:
@@ -19,6 +21,11 @@ services:
       - db
     volumes:
       - ./logs:/app/logs
+    networks:
+      - mynetwork
 
 volumes:
   db_data:
+
+networks:
+  mynetwork:
