@@ -63,4 +63,25 @@ func main() {
 			logFile.WriteString(line + "\n")
 		}
 	}
+
+	// Получение списка таблиц базы данных
+	rows, err := db.Query("SHOW TABLES")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer rows.Close()
+
+	// Чтение названий таблиц и запись их в лог
+	for rows.Next() {
+		var tableName string
+		err := rows.Scan(&tableName)
+		if err != nil {
+			log.Fatal(err)
+		}
+		log.Println("There are tables in the mydb databases:", tableName)
+	}
+
+	if err = rows.Err(); err != nil {
+		log.Fatal(err)
+	}
 }
