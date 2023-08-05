@@ -1,34 +1,3 @@
-2023/08/05 10:24:50 books
-2023/08/05 10:24:50 json: cannot unmarshal object into Go value of type []main.Author
-2023/08/05 10:48:15 authors
-2023/08/05 10:48:15 books
-2023/08/05 10:48:15 json: cannot unmarshal object into Go value of type []main.Author
-2023/08/05 10:57:57 Database connection successful
-2023/08/05 14:04:18 Database connection successful
-2023/08/05 14:17:44 Database connection successful
-2023/08/05 15:42:01 Database connection successful
-2023/08/05 15:42:01 There are tables in the mydb databases: authors
-2023/08/05 15:42:01 There are tables in the mydb databases: books
-2023/08/05 15:58:32 Database connection successful
-2023/08/05 15:58:32 There are tables in the mydb databases: authors
-2023/08/05 15:58:32 There are tables in the mydb databases: books
-2023/08/05 15:58:32 Таблица authors пустая
-2023/08/05 16:09:25 Database connection successful
-2023/08/05 16:09:25 There are tables in the mydb databases: authors
-2023/08/05 16:09:25 There are tables in the mydb databases: books
-2023/08/05 16:09:25 Таблица authors пустая
-2023/08/05 16:09:25 Таблица books пустая
-2023/08/05 16:09:25 json: cannot unmarshal object into Go value of type []main.Author
-2023/08/05 16:15:05 Database connection successful
-2023/08/05 16:15:05 There are tables in the mydb databases: authors
-2023/08/05 16:15:05 There are tables in the mydb databases: books
-2023/08/05 16:15:05 Таблица authors пустая
-2023/08/05 16:15:05 Таблица books пустая
-2023/08/05 16:15:05 json: cannot unmarshal string into Go struct field Author.books of type main.Book
-2023/08/05 16:23:42 Database connection successful
-2023/08/05 16:23:42 There are tables in the mydb databases: authors
-2023/08/05 16:23:42 There are tables in the mydb databases: books
-2023/08/05 16:23:42 Таблица authors пустая
 2023/08/05 16:23:42 Таблица books пустая
 2023/08/05 16:27:34 Database connection successful
 2023/08/05 16:27:34 There are tables in the mydb databases: authors
@@ -77,3 +46,48 @@
 2023/08/05 16:32:50 Data: 16 Братья Карамазовы 8
 2023/08/05 16:32:50 Data: 17 Мастер и Маргарита 9
 2023/08/05 16:32:50 Data: 18 Маленький принц 10
+2023/08/05 16:43:40 Database connection successful
+
+2023/08/05 16:43:40 There are tables in the mydb databases: authors
+2023/08/05 16:43:40 There are tables in the mydb databases: books
+2023/08/05 16:43:40 Data added
+2023/08/05 16:43:40 Data: 2 Лев Толстой
+2023/08/05 16:43:40 Data: 3 Федор Достоевский
+2023/08/05 16:43:40 Data: 4 Михаил Булгаков
+2023/08/05 16:43:40 Data: 5 Антуан де Сент-Экзюпери
+2023/08/05 16:43:40 Data: 6 Александр Пушкин
+2023/08/05 16:43:40 Data: 7 Лев Толстой
+2023/08/05 16:43:40 Data: 8 Федор Достоевский
+2023/08/05 16:43:40 Data: 9 Михаил Булгаков
+2023/08/05 16:43:40 Data: 10 Антуан де Сент-Экзюпери
+2023/08/05 16:43:40 Data: 11 Александр Пушкин
+2023/08/05 16:43:40 Data: 12 Лев Толстой
+2023/08/05 16:43:40 Data: 13 Федор Достоевский
+2023/08/05 16:43:40 Data: 14 Михаил Булгаков
+2023/08/05 16:43:40 Data: 15 Антуан де Сент-Экзюпери
+2023/08/05 16:43:40 Data: 2 Руслан и Людмила 1
+2023/08/05 16:43:40 Data: 3 Пиковая дама 1
+2023/08/05 16:43:40 Data: 4 Война и мир 2
+2023/08/05 16:43:40 Data: 5 Анна Каренина 2
+2023/08/05 16:43:40 Data: 6 Преступление и наказание 3
+2023/08/05 16:43:40 Data: 7 Братья Карамазовы 3
+2023/08/05 16:43:40 Data: 8 Мастер и Маргарита 4
+2023/08/05 16:43:40 Data: 9 Маленький принц 5
+2023/08/05 16:43:40 Data: 10 Евгений Онегин 6
+2023/08/05 16:43:40 Data: 11 Руслан и Людмила 6
+2023/08/05 16:43:40 Data: 12 Пиковая дама 6
+2023/08/05 16:43:40 Data: 13 Война и мир 7
+2023/08/05 16:43:40 Data: 14 Анна Каренина 7
+2023/08/05 16:43:40 Data: 15 Преступление и наказание 8
+2023/08/05 16:43:40 Data: 16 Братья Карамазовы 8
+2023/08/05 16:43:40 Data: 17 Мастер и Маргарита 9
+2023/08/05 16:43:40 Data: 18 Маленький принц 10
+2023/08/05 16:43:40 Data: 19 Евгений Онегин 11
+2023/08/05 16:43:40 Data: 20 Руслан и Людмила 11
+2023/08/05 16:43:40 Data: 21 Пиковая дама 11
+2023/08/05 16:43:40 Data: 22 Война и мир 12
+2023/08/05 16:43:40 Data: 23 Анна Каренина 12
+2023/08/05 16:43:40 Data: 24 Преступление и наказание 13
+2023/08/05 16:43:40 Data: 25 Братья Карамазовы 13
+2023/08/05 16:43:40 Data: 26 Мастер и Маргарита 14
+2023/08/05 16:43:40 Data: 27 Маленький принц 15
