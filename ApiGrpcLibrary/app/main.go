@@ -291,7 +291,9 @@ func main() {
 
 	readTableBooks()
 
-	log.Println(checkAuthors(), checkBooks())
+	if !checkAuthors() && !checkBooks() {
+		log.Println("The base is empty")
+	}
 
 	cleanLog()
 }
