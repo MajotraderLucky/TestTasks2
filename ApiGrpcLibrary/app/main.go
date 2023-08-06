@@ -2,7 +2,6 @@ package main
 
 import (
 	"database/sql"
-	"encoding/json"
 	"log"
 	"os"
 	"strings"
@@ -19,37 +18,47 @@ type Book struct {
 	Title string `json:"title"`
 }
 
-func main() {
-	// Создание директории logs, если она не существует
+func createLogsDirectory() error {
 	err := os.MkdirAll("logs", 0755)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
+	return nil
+}
 
-	// Открытие файла log.txt в режиме добавления и запись в него текста
+func openLogFile() (*os.File, error) {
 	logFile, err := os.OpenFile("logs/log.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
-	defer logFile.Close()
+	return logFile, nil
+}
 
-	// Установка логгера для вывода в файл
+func setLogger(logFile *os.File) {
 	log.SetOutput(logFile)
+}
 
+func connectToDatabase() (*sql.DB, error) {
 	db, err := sql.Open("mysql", "myuser:mypassword@tcp(db:3306)/mydb")
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
-	defer db.Close()
+	return db, nil
+}
 
-	// Пинг базы данных
-	err = db.Ping()
+func pingDatabase(db *sql.DB) error {
+	err := db.Ping()
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
+	return nil
+}
 
-	log.Println("Database connection successful")
+func logLine() {
+	log.Println("-------------------------------------------------")
+}
 
+func cleanLog() {
 	// Чтение содержимого файла log.txt
 	data, err := os.ReadFile("logs/log.txt")
 	if err != nil {
@@ -73,7 +82,12 @@ func main() {
 			logFile.WriteString(line + "\n")
 		}
 	}
+}
 
+func takeTables() {
+	db, err := sql.Open("mysql", "myuser:mypassword@tcp(db:3306)/mydb")
+	if err != nil {
+	}
 	// Получение списка таблиц базы данных
 	rows, err := db.Query("SHOW TABLES")
 	if err != nil {
@@ -94,10 +108,18 @@ func main() {
 	if err = rows.Err(); err != nil {
 		log.Fatal(err)
 	}
+}
+
+func readTableAuthors() {
+	db, err := sql.Open("mysql", "myuser:mypassword@tcp(db:3306)/mydb")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
 
 	// Выполнение запроса SELECT * FROM authors
 	query := "SELECT * FROM authors"
-	rows, err = db.Query(query)
+	rows, err := db.Query(query)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -106,31 +128,86 @@ func main() {
 	// Проверка наличия данных в таблице
 	if !rows.Next() {
 		log.Println("Таблица authors пустая")
+		return
 	}
 
-	log.Println("Data added")
-
-	// Чтение данных и запись их в лог
+	// Вывод авторов в лог
+	log.Println("Список авторов:")
 	for rows.Next() {
-		// Чтение значений строки
 		var id int
 		var name string
 		err := rows.Scan(&id, &name)
 		if err != nil {
 			log.Fatal(err)
 		}
+		log.Printf("ID: %d, Name: %s\n", id, name)
+	}
+}
 
-		// Запись значений в лог
-		log.Println("Data:", id, name)
+func cleanBooksAndAuthors(authorID int) error {
+	db, err := sql.Open("mysql", "myuser:mypassword@tcp(db:3306)/mydb")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
+
+	tx, err := db.Begin()
+	if err != nil {
+		return err
 	}
 
-	if err = rows.Err(); err != nil {
+	_, err = tx.Exec("DELETE FROM books WHERE author_id = $1", authorID)
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	_, err = tx.Exec("DELETE FROM authors WHERE id = $1", authorID)
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	err = tx.Commit()
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func checkAuthors() bool {
+	db, err := sql.Open("mysql", "myuser:mypassword@tcp(db:3306)/mydb")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
+
+	// Проверка наличия данных в таблице
+	query := "SELECT COUNT(*) FROM authors"
+	var count int
+	err = db.QueryRow(query).Scan(&count)
+	if err != nil {
 		log.Fatal(err)
 	}
 
+	if count == 0 {
+		return false
+	} else {
+		return true
+	}
+}
+
+func readTableBooks() {
+	db, err := sql.Open("mysql", "myuser:mypassword@tcp(db:3306)/mydb")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
+
 	// Выполнение запроса SELECT * FROM books
-	query = "SELECT * FROM books"
-	rows, err = db.Query(query)
+	query := "SELECT * FROM books"
+	rows, err := db.Query(query)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -139,61 +216,82 @@ func main() {
 	// Проверка наличия данных в таблице
 	if !rows.Next() {
 		log.Println("Таблица books пустая")
+		return
 	}
 
-	// Чтение данных и запись их в лог
+	// Вывод книг в лог
+	log.Println("Список книг:")
 	for rows.Next() {
-		// Чтение значений строки
 		var id int
 		var title string
-		var authorID int
-		err := rows.Scan(&id, &title, &authorID)
+		var author string
+		err := rows.Scan(&id, &title, &author)
 		if err != nil {
 			log.Fatal(err)
 		}
-
-		// Запись значений в лог
-		log.Println("Data:", id, title, authorID)
+		log.Printf("ID: %d, Title: %s, Author: %s\n", id, title, author)
 	}
+}
 
-	if err = rows.Err(); err != nil {
+func checkBooks() bool {
+	db, err := sql.Open("mysql", "myuser:mypassword@tcp(db:3306)/mydb")
+	if err != nil {
 		log.Fatal(err)
 	}
+	defer db.Close()
 
-	// Чтение содержимого файла
-	file, err := os.ReadFile("books.json")
+	// Проверка наличия данных в таблице
+	query := "SELECT COUNT(*) FROM books"
+	var count int
+	err = db.QueryRow(query).Scan(&count)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	// Преобразование содержимого файла в массив структур Author
-	var authors []Author
-	err = json.Unmarshal(file, &authors)
+	if count == 0 {
+		return false
+	} else {
+		return true
+	}
+}
+
+func main() {
+	err := createLogsDirectory()
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	for _, author := range authors {
-		// Выполнение операции вставки записи в таблицу authors
-		_, err := db.Exec("INSERT INTO authors (name) VALUES (?)", author.Name)
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		// Получение ID последней вставленной записи
-		var authorID int64
-		err = db.QueryRow("SELECT LAST_INSERT_ID()").Scan(&authorID)
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		// Вставка данных в таблицу books
-		for _, book := range author.Books {
-			// Выполнение операции вставки записи в таблицу books
-			_, err := db.Exec("INSERT INTO books (title, author_id) VALUES (?, ?)", book, authorID)
-			if err != nil {
-				log.Fatal(err)
-			}
-		}
+	logFile, err := openLogFile()
+	if err != nil {
+		log.Fatal(err)
 	}
+	defer logFile.Close()
+
+	setLogger(logFile)
+
+	logLine()
+	log.Println("Start aplication")
+
+	db, err := connectToDatabase()
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
+
+	err = pingDatabase(db)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	log.Println("Database connection successful")
+
+	takeTables()
+
+	readTableAuthors()
+
+	readTableBooks()
+
+	log.Println(checkAuthors(), checkBooks())
+
+	cleanLog()
 }
