@@ -362,9 +362,5 @@ func main() {
 		log.Println("The base is empty")
 		addAuthorsAndBooks()
 	}
-
-	readTableAuthors()
-	readTableBooks()
-
 	cleanLog()
 }
