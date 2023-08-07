@@ -1,50 +1,50 @@
+2023/08/06 19:40:22 There are tables in the mydb databases: authors
+2023/08/06 19:40:22 There are tables in the mydb databases: books
+2023/08/06 19:40:22 Таблица authors пустая
+2023/08/06 19:40:22 Таблица books пустая
+2023/08/06 19:40:22 The base is empty
 
-2023/08/06 14:09:53 -------------------------------------------------
-2023/08/06 14:09:53 Start aplication
-2023/08/06 14:09:53 Database connection successful
-2023/08/06 14:09:53 There are tables in the mydb databases: authors
-2023/08/06 14:09:53 There are tables in the mydb databases: books
-2023/08/06 14:09:53 Таблица authors пустая
+2023/08/08 00:53:05 -------------------------------------------------
+2023/08/08 00:53:05 Start aplication
+2023/08/08 00:53:05 Database connection successful
+2023/08/08 00:53:05 There are tables in the mydb databases: authors
+2023/08/08 00:53:05 There are tables in the mydb databases: books
+2023/08/08 00:53:05 Таблица authors пустая
+2023/08/08 00:53:05 Таблица books пустая
+2023/08/08 00:53:05 The base is empty
 
-2023/08/06 14:13:31 -------------------------------------------------
-2023/08/06 14:13:31 Start aplication
-2023/08/06 14:13:31 Database connection successful
-2023/08/06 14:13:31 There are tables in the mydb databases: authors
-2023/08/06 14:13:31 There are tables in the mydb databases: books
-2023/08/06 14:13:31 Таблица authors пустая
-
-2023/08/06 14:15:31 -------------------------------------------------
-2023/08/06 14:15:31 Start aplication
-2023/08/06 14:15:31 Database connection successful
-2023/08/06 14:15:31 There are tables in the mydb databases: authors
-2023/08/06 14:15:31 There are tables in the mydb databases: books
-2023/08/06 14:15:31 Таблица authors пустая
-2023/08/06 14:15:31 false
-
-2023/08/06 14:23:46 -------------------------------------------------
-2023/08/06 14:23:46 Start aplication
-2023/08/06 14:23:46 Database connection successful
-2023/08/06 14:23:46 There are tables in the mydb databases: authors
-2023/08/06 14:23:46 There are tables in the mydb databases: books
-2023/08/06 14:23:46 Таблица authors пустая
-2023/08/06 14:23:46 Таблица books пустая
-
-2023/08/06 14:28:14 -------------------------------------------------
-2023/08/06 14:28:14 Start aplication
-2023/08/06 14:28:14 Database connection successful
-2023/08/06 14:28:14 There are tables in the mydb databases: authors
-2023/08/06 14:28:14 There are tables in the mydb databases: books
-2023/08/06 14:28:14 Таблица authors пустая
-2023/08/06 14:28:14 Таблица books пустая
-2023/08/06 14:28:14 false false
-
-2023/08/06 14:37:59 -------------------------------------------------
-2023/08/06 14:37:59 Start aplication
-2023/08/06 14:37:59 Database connection successful
-2023/08/06 14:37:59 There are tables in the mydb databases: authors
-2023/08/06 14:37:59 There are tables in the mydb databases: books
-2023/08/06 14:37:59 Таблица authors пустая
-2023/08/06 14:37:59 Таблица books пустая
-2023/08/06 14:37:59 false false
-2023/08/06 14:37:59 The base is empty
+2023/08/08 00:58:14 -------------------------------------------------
+2023/08/08 00:58:14 Start aplication
+2023/08/08 00:58:14 Database connection successful
+2023/08/08 00:58:14 There are tables in the mydb databases: authors
+2023/08/08 00:58:14 There are tables in the mydb databases: books
+2023/08/08 00:58:14 Таблица authors пустая
+2023/08/08 00:58:14 Таблица books пустая
+2023/08/08 00:58:14 The base is empty
+2023/08/08 00:58:14 Error 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'CREATE TABLE IF NOT EXISTS books (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  title ' at line 6
+2023/08/08 01:07:18 -------------------------------------------------
+2023/08/08 01:07:18 Start aplication
+2023/08/08 01:07:18 Database connection successful
+2023/08/08 01:07:18 There are tables in the mydb databases: authors
+2023/08/08 01:07:18 There are tables in the mydb databases: books
+2023/08/08 01:07:18 Таблица authors пустая
+2023/08/08 01:07:18 Таблица books пустая
+2023/08/08 01:07:18 The base is empty
+2023/08/08 01:07:21 Data inserted successfully.
+2023/08/08 01:07:21 Список авторов:
+2023/08/08 01:07:21 ID: 7, Name: Лев Толстой
+2023/08/08 01:07:21 ID: 8, Name: Федор Достоевский
+2023/08/08 01:07:21 ID: 9, Name: Михаил Булгаков
+2023/08/08 01:07:21 ID: 10, Name: Антуан де Сент-Экзюпери
+2023/08/08 01:07:21 Список книг:
+2023/08/08 01:07:21 ID: 11, Title: Руслан и Людмила, Author: 6
+2023/08/08 01:07:21 ID: 12, Title: Пиковая дама, Author: 6
+2023/08/08 01:07:21 ID: 13, Title: Война и мир, Author: 7
+2023/08/08 01:07:21 ID: 14, Title: Анна Каренина, Author: 7
+2023/08/08 01:07:21 ID: 15, Title: Преступление и наказание, Author: 8
+2023/08/08 01:07:21 ID: 16, Title: Братья Карамазовы, Author: 8
+2023/08/08 01:07:21 ID: 17, Title: Мастер и Маргарита, Author: 9
+2023/08/08 01:07:21 ID: 18, Title: Маленький принц, Author: 10
 

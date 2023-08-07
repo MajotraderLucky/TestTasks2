@@ -2,6 +2,7 @@ package main
 
 import (
 	"database/sql"
+	"encoding/json"
 	"log"
 	"os"
 	"strings"
@@ -255,6 +256,72 @@ func checkBooks() bool {
 	}
 }
 
+func addAuthorsAndBooks() {
+	db, err := sql.Open("mysql", "myuser:mypassword@tcp(db:3306)/mydb")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
+
+	initSQL :=
+		`CREATE TABLE IF NOT EXISTS authors (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255)
+  );`
+
+	_, err = db.Exec(initSQL)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	initSQL2 :=
+		`CREATE TABLE IF NOT EXISTS books (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255),
+    author_id INT,
+    FOREIGN KEY (author_id) REFERENCES authors(id)
+  );`
+
+	_, err = db.Exec(initSQL2)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	file, err := os.ReadFile("books.json")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	var authors []Author
+	err = json.Unmarshal(file, &authors)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	for _, author := range authors {
+		insertAuthorSQL := "INSERT INTO authors (name) VALUES (?)"
+		result, err := db.Exec(insertAuthorSQL, author.Name)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		authorID, err := result.LastInsertId()
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		for _, book := range author.Books {
+			insertBookSQL := "INSERT INTO books (title, author_id) VALUES (?, ?)"
+			_, err = db.Exec(insertBookSQL, book, authorID)
+			if err != nil {
+				log.Fatal(err)
+			}
+		}
+	}
+
+	log.Println("Data inserted successfully.")
+}
+
 func main() {
 	err := createLogsDirectory()
 	if err != nil {
@@ -293,7 +360,11 @@ func main() {
 
 	if !checkAuthors() && !checkBooks() {
 		log.Println("The base is empty")
+		addAuthorsAndBooks()
 	}
+
+	readTableAuthors()
+	readTableBooks()
 
 	cleanLog()
 }
