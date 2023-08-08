@@ -10,5 +10,3 @@ message PingResponse {
 service PingService {
   rpc Ping(PingRequest) returns (PingResponse);
 }
-
-option go_package = "github.com/MajotraderLucky/TestTasks2/ApiGrpcLibrary/";
