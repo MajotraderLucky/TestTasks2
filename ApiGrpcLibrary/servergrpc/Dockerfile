@@ -6,4 +6,4 @@ COPY . .
 
 RUN go build -o main .
 
-CMD sh -c "sleep 10 && go run main.go"
+CMD sh -c "sleep 10 && go run server.go"

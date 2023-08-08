@@ -70,7 +70,7 @@ func cleanLog() {
 	lines := strings.Split(string(data), "\n")
 
 	// Проверка количества строк
-	if len(lines) > 50 {
+	if len(lines) > 100 {
 		// Открытие файла log.txt в режиме перезаписи
 		logFile, err := os.OpenFile("logs/log.txt", os.O_TRUNC|os.O_CREATE|os.O_WRONLY, 0644)
 		if err != nil {
@@ -79,7 +79,7 @@ func cleanLog() {
 		defer logFile.Close()
 
 		// Запись последних 50 строк в файл
-		for _, line := range lines[len(lines)-50:] {
+		for _, line := range lines[len(lines)-100:] {
 			logFile.WriteString(line + "\n")
 		}
 	}
