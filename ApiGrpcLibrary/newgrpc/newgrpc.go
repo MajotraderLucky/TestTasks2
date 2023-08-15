@@ -1,8 +1,11 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
+
+	pb "newgrpc/proto"
 )
 
 func createLogsDirectory() error {
@@ -28,6 +31,7 @@ func setLogger(logFile *os.File) {
 func logLine() {
 	log.Println("-----------------------------")
 }
+
 func main() {
 	err := createLogsDirectory()
 	if err != nil {
@@ -44,4 +48,20 @@ func main() {
 
 	logLine()
 	log.Println("Start newgrpc")
+
+	activity := &pb.Activity{
+		Id:          1,
+		Description: "Some activity",
+	}
+
+	// timestamp := &pb.Timestamp{
+	// 	Seconds: time.Now().Unix(),
+	// 	Nanos:   int32(time.Now().Nanosecond()),
+	// }
+
+	// activity.Time = timestamp
+
+	fmt.Println("Id:", activity.Id)
+	// fmt.Println("Time:", activity.Time)
+	fmt.Println("Description:", activity.Description)
 }
