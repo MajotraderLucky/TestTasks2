@@ -11,6 +11,21 @@ services:
     networks:
       - mynetwork
 
+  app:
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    ports:
+      - 8080:8080
+    depends_on:
+      - db
+    volumes:
+      - ./logs:/app/logs
+    environment:
+      - TZ=Europe/Moscow
+    networks:
+      - mynetwork
+
 volumes:
   db_data:
 
