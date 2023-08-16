@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"os"
 
@@ -54,14 +53,14 @@ func main() {
 		Description: "Some activity",
 	}
 
-	// timestamp := &pb.Timestamp{
-	// 	Seconds: time.Now().Unix(),
-	// 	Nanos:   int32(time.Now().Nanosecond()),
-	// }
+	log.Println("Id:", activity.Id)
+	log.Println("Description:", activity.Description)
 
-	// activity.Time = timestamp
+	mytimestamp := &pb.MyTimestamp{
+		Seconds: 50,
+		Nanos:   4,
+	}
 
-	fmt.Println("Id:", activity.Id)
-	// fmt.Println("Time:", activity.Time)
-	fmt.Println("Description:", activity.Description)
+	log.Println("Seconds:", mytimestamp.Seconds)
+	log.Println("Nanos:", mytimestamp.Nanos)
 }

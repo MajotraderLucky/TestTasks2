@@ -2,12 +2,15 @@ syntax = "proto3";
 
 package api.v1;
 
-import "google/protobuf/timestamp.proto";
-
 option go_package = ".;v1";
 
 message Activity {
     int32 id = 1;
-    google.protobuf.Timestamp time = 2;
+    MyTimestamp time = 2;
     string description = 3;
+}
+
+message MyTimestamp {
+    int64 seconds = 1;
+    int32 nanos = 2;
 }
