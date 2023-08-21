@@ -4,7 +4,7 @@ import (
 	"log"
 	"os"
 
-	pb "grpc/proto"
+	pb "github.com/MajotraderLucky/TestTasks2/Repo/protobuf"
 )
 
 func createLogsDirectory() error {
