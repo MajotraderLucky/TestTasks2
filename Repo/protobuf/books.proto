@@ -14,3 +14,14 @@ message MyTimestamp {
   int64 seconds = 1;
   int32 nanos = 2;
 }
+
+// Ping the database
+service PingService {
+  rpc Ping(PingRequest) returns (PingResponse);
+}
+
+message PingRequest {}
+
+message PingResponse {
+  bool success = 1;
+}
