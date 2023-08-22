@@ -1,10 +1,13 @@
 package main
 
 import (
+	"database/sql"
 	"log"
+	"net"
 	"os"
 
-	pb "github.com/MajotraderLucky/TestTasks2/Repo/protobuf"
+	_ "github.com/go-sql-driver/mysql"
+	"google.golang.org/grpc"
 )
 
 func createLogsDirectory() error {
@@ -28,7 +31,7 @@ func setLogger(logFile *os.File) {
 }
 
 func logLine() {
-	log.Println("-----------------------------")
+	log.Println("----------------------------------------")
 }
 
 func main() {
@@ -46,21 +49,40 @@ func main() {
 	setLogger(logFile)
 
 	logLine()
-	log.Println("Start newgrpc")
+	log.Println("Starting grpc server...")
 
-	activity := &pb.Activity{
-		Id:          1,
-		Description: "Some activity",
+	// Connect to the database
+	db, err := sql.Open("mysql", "myuser:mypassword@tcp(db:3306)/mydb")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
+
+	log.Println("Connecting to database")
+
+	// create a new server gRPC
+	lis, err := net.Listen("tcp", ":50051")
+	if err != nil {
+		log.Fatalf("failed to listen: %v", err)
 	}
 
-	log.Println("Id:", activity.Id)
-	log.Println("Description:", activity.Description)
+	log.Println("Server listening on port 50051")
 
-	mytimestamp := &pb.MyTimestamp{
-		Seconds: 50,
-		Nanos:   4,
+	s := grpc.NewServer()
+
+	// Ping to the database
+	logLine()
+	log.Println("Pinging to the database...")
+	_, err = db.Exec("SELECT 1")
+	if err != nil {
+		log.Fatal(err)
+	}
+	logLine()
+	log.Println("Database pinged successfully!")
+
+	if err := s.Serve(lis); err != nil {
+		log.Fatalf("failed to serve: %v", err)
 	}
 
-	log.Println("Seconds:", mytimestamp.Seconds)
-	log.Println("Nanos:", mytimestamp.Nanos)
+	log.Println("Server shutting")
 }
