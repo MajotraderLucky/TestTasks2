@@ -25,3 +25,26 @@ message PingRequest {}
 message PingResponse {
   bool success = 1;
 }
+
+// Query the database
+service QueryService {
+  rpc Query(QueryRequest) returns (QueryResponse);
+}
+
+message QueryRequest {
+  string sql = 1;
+}
+
+message QueryResponse {
+  map<string, Value> results = 1;
+}
+
+message Value {
+  oneof value {
+    string string_value = 1;
+    int64 int64_value = 2;
+    float float_value = 3;
+    double double_value = 4;
+    bool bool_value = 5;
+  }
+}
