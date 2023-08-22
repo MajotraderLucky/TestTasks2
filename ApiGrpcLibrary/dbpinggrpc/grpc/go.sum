@@ -1,5 +1,7 @@
 github.com/MajotraderLucky/TestTasks2 v0.0.0-20230821170608-b5e09ed72793 h1:RPwlyWphEvbk7+PRjc/fgdlPNJt04YzHsr2/X0ZpIJw=
 github.com/MajotraderLucky/TestTasks2 v0.0.0-20230821170608-b5e09ed72793/go.mod h1:Xadp0PGvVoFFhdqawaPdoPLktLmns3I38qQxhRcoxPI=
+github.com/MajotraderLucky/TestTasks2 v0.0.0-20230822153948-27f0239b4866 h1:gkSvmeVZWx3hSVmidvhgMZqVQ+/GV/ip52wl1tcbB7U=
+github.com/MajotraderLucky/TestTasks2 v0.0.0-20230822153948-27f0239b4866/go.mod h1:Xadp0PGvVoFFhdqawaPdoPLktLmns3I38qQxhRcoxPI=
 github.com/go-sql-driver/mysql v1.7.1 h1:lUIinVbN1DY0xBg0eMOzmmtGoHwWBbvnWubQUrtU8EI=
 github.com/go-sql-driver/mysql v1.7.1/go.mod h1:OXbVy3sEdcQ2Doequ6Z5BW6fXNQTmx+9S1MCJN5yJMI=
 github.com/golang/protobuf v1.5.0/go.mod h1:FsONVRAS9T7sI+LIUmWTfcYkHO4aIWwzhcaSAoJOfIk=

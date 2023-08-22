@@ -1,14 +1,30 @@
 package main
 
 import (
+	"context"
 	"database/sql"
 	"log"
 	"net"
 	"os"
 
+	pb "github.com/MajotraderLucky/TestTasks2/Repo/protobuf"
 	_ "github.com/go-sql-driver/mysql"
 	"google.golang.org/grpc"
 )
+
+type MyQueryServiceServer struct {
+	pb.QueryServiceServer
+}
+
+func (s MyQueryServiceServer) Query(ctx context.Context, req *pb.QueryRequest) (*pb.QueryResponse, error) {
+	// Open a connection to the database
+	db, err := sql.Open("mysql", "myuser:mypassword@tcp(db:3306)/mydb")
+	if err != nil {
+		return nil, err
+	}
+	defer db.Close()
+	return &pb.QueryResponse{}, nil
+}
 
 func createLogsDirectory() error {
 	err := os.MkdirAll("logs", 0755)
