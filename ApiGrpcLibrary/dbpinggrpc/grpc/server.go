@@ -3,9 +3,11 @@ package main
 import (
 	"context"
 	"database/sql"
+	"fmt"
 	"log"
 	"net"
 	"os"
+	"strconv"
 
 	pb "github.com/MajotraderLucky/TestTasks2/Repo/protobuf"
 	_ "github.com/go-sql-driver/mysql"
@@ -23,7 +25,58 @@ func (s MyQueryServiceServer) Query(ctx context.Context, req *pb.QueryRequest) (
 		return nil, err
 	}
 	defer db.Close()
-	return &pb.QueryResponse{}, nil
+
+	// Execute a mysql query
+	rows, err := db.Query(req.Sql)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	// Forming a mysql response
+	result := make(map[string]*pb.Value)
+	columns, err := rows.Columns()
+	if err != nil {
+		return nil, err
+	}
+	values := make([]interface{}, len(columns))
+	valuePtrs := make([]interface{}, len(columns))
+	for i := range columns {
+		valuePtrs[i] = &values[i]
+	}
+	for rows.Next() {
+		err := rows.Scan(valuePtrs...)
+		if err != nil {
+			return nil, err
+		}
+		rowResult := make(map[string]*pb.Value)
+		for i, col := range columns {
+			rowResult[col] = &pb.Value{
+				Value: &pb.Value_StringValue{
+					StringValue: fmt.Sprintf("%v", values[i])},
+			}
+		}
+		result := make(map[string]*pb.Value)
+		for rows.Next() {
+			var rowResult string
+			if err := rows.Scan(&rowResult); err != nil {
+				return nil, err
+			}
+			result[strconv.Itoa(len(result))] = &pb.Value{
+				Value: &pb.Value_StringValue{
+					StringValue: rowResult,
+				},
+			}
+		}
+		if err := rows.Err(); err != nil {
+			return nil, err
+		}
+	}
+	// Creating an instance of pb.QueryResponse and filling it with data
+	response := &pb.QueryResponse{
+		Results: result,
+	}
+	return response, nil
 }
 
 func createLogsDirectory() error {
