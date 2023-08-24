@@ -109,7 +109,8 @@ var PingService_ServiceDesc = grpc.ServiceDesc{
 }
 
 const (
-	QueryService_Query_FullMethodName = "/api.v1.QueryService/Query"
+	QueryService_Query_FullMethodName   = "/api.v1.QueryService/Query"
+	QueryService_GetData_FullMethodName = "/api.v1.QueryService/GetData"
 )
 
 // QueryServiceClient is the client API for QueryService service.
@@ -117,6 +118,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type QueryServiceClient interface {
 	Query(ctx context.Context, in *QueryRequest, opts ...grpc.CallOption) (*QueryResponse, error)
+	GetData(ctx context.Context, in *GetDataRequest, opts ...grpc.CallOption) (*GetDataResponse, error)
 }
 
 type queryServiceClient struct {
@@ -136,11 +138,21 @@ func (c *queryServiceClient) Query(ctx context.Context, in *QueryRequest, opts .
 	return out, nil
 }
 
+func (c *queryServiceClient) GetData(ctx context.Context, in *GetDataRequest, opts ...grpc.CallOption) (*GetDataResponse, error) {
+	out := new(GetDataResponse)
+	err := c.cc.Invoke(ctx, QueryService_GetData_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // QueryServiceServer is the server API for QueryService service.
 // All implementations must embed UnimplementedQueryServiceServer
 // for forward compatibility
 type QueryServiceServer interface {
 	Query(context.Context, *QueryRequest) (*QueryResponse, error)
+	GetData(context.Context, *GetDataRequest) (*GetDataResponse, error)
 	mustEmbedUnimplementedQueryServiceServer()
 }
 
@@ -150,6 +162,9 @@ type UnimplementedQueryServiceServer struct {
 
 func (UnimplementedQueryServiceServer) Query(context.Context, *QueryRequest) (*QueryResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Query not implemented")
+}
+func (UnimplementedQueryServiceServer) GetData(context.Context, *GetDataRequest) (*GetDataResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetData not implemented")
 }
 func (UnimplementedQueryServiceServer) mustEmbedUnimplementedQueryServiceServer() {}
 
@@ -182,6 +197,24 @@ func _QueryService_Query_Handler(srv interface{}, ctx context.Context, dec func(
 	return interceptor(ctx, in, info, handler)
 }
 
+func _QueryService_GetData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetDataRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServiceServer).GetData(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: QueryService_GetData_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServiceServer).GetData(ctx, req.(*GetDataRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // QueryService_ServiceDesc is the grpc.ServiceDesc for QueryService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -192,6 +225,10 @@ var QueryService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Query",
 			Handler:    _QueryService_Query_Handler,
+		},
+		{
+			MethodName: "GetData",
+			Handler:    _QueryService_GetData_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

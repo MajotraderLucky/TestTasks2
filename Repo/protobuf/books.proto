@@ -4,17 +4,6 @@ package api.v1;
 
 option go_package = ".;protobuf";
 
-message Activity {
-  int32 id = 1;
-  MyTimestamp time = 2;
-  string description = 3;
-}
-
-message MyTimestamp {
-  int64 seconds = 1;
-  int32 nanos = 2;
-}
-
 // Ping the database
 service PingService {
   rpc Ping(PingRequest) returns (PingResponse);
@@ -29,6 +18,15 @@ message PingResponse {
 // Query the database
 service QueryService {
   rpc Query(QueryRequest) returns (QueryResponse);
+  rpc GetData(GetDataRequest) returns (GetDataResponse);
+}
+
+message GetDataRequest {
+  string data_id = 1;
+}
+
+message GetDataResponse {
+  string data = 1;
 }
 
 message QueryRequest {
