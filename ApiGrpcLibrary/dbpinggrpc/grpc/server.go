@@ -149,6 +149,57 @@ func main() {
 	logLine()
 	log.Println("Database pinged successfully!")
 
+	// Get table names from the database and write them
+	// to the slice of table names
+	logLine()
+	log.Println("Getting table names from the database...")
+	rows, err := db.Query("SHOW TABLES")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer rows.Close()
+	var tableNames []string
+	for rows.Next() {
+		var tableName string
+		if err := rows.Scan(&tableName); err != nil {
+			log.Fatal(err)
+		}
+		tableNames = append(tableNames, tableName)
+	}
+	logLine()
+	log.Println("Got table names: ", tableNames)
+
+	pb.RegisterQueryServiceServer(s, &MyQueryServiceServer{})
+
+	// Print in the log file to the slice of table name
+	logLine()
+	tableName := tableNames[0]
+	log.Println("Getting data from table: ", tableName)
+	rows, err = db.Query("SELECT * FROM " + tableName)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer rows.Close()
+	var data [][]string
+	for rows.Next() {
+		var id int
+		var name string
+		if err := rows.Scan(&id, &name); err != nil {
+			log.Fatal(err)
+		}
+		data = append(data, []string{strconv.Itoa(id), name})
+	}
+	logLine()
+	log.Println("Got data from table: ", tableName)
+	logLine()
+	log.Println(data)
+
+	// Start server
+	logLine()
+
+	logLine()
+	log.Println("Starting gRPC server...")
+
 	if err := s.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)
 	}
