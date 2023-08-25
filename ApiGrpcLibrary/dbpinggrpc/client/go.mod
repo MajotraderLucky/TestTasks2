@@ -3,7 +3,7 @@ module client
 go 1.20
 
 require (
-	github.com/MajotraderLucky/TestTasks2 v0.0.0-20230824205303-706f72d9f332 // indirect
+	github.com/MajotraderLucky/TestTasks2 v0.0.0-20230825001238-51408f3ac614 // indirect
 	github.com/golang/protobuf v1.5.3 // indirect
 	golang.org/x/net v0.9.0 // indirect
 	golang.org/x/sys v0.7.0 // indirect

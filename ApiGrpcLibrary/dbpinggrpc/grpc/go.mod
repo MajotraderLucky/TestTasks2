@@ -3,7 +3,7 @@ module server
 go 1.20
 
 require (
-	github.com/MajotraderLucky/TestTasks2 v0.0.0-20230824205303-706f72d9f332
+	github.com/MajotraderLucky/TestTasks2 v0.0.0-20230825001238-51408f3ac614
 	google.golang.org/grpc v1.57.0
 )
 
