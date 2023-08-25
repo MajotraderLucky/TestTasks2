@@ -18,6 +18,43 @@ type MyQueryServiceServer struct {
 	pb.QueryServiceServer
 }
 
+func (s *MyQueryServiceServer) GetData(ctx context.Context, request *pb.GetDataRequest) (*pb.GetDataResponse, error) {
+
+	// Open a connection to the database
+	db, err := sql.Open("mysql", "myuser:mypassword@tcp(db:3306)/mydb")
+	if err != nil {
+		return nil, err
+	}
+	defer db.Close()
+
+	// Get table names from the database and write them
+	// to the response.
+	logLine()
+	log.Println("Getting table names from database")
+	rows, err := db.Query("SHOW TABLES")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer rows.Close()
+
+	var tableNames []string
+	for rows.Next() {
+		var tableName string
+		if err := rows.Scan(&tableName); err != nil {
+			log.Fatal(err)
+		}
+		tableNames = append(tableNames, tableName)
+	}
+	logLine()
+	log.Println("Got table names: ", tableNames)
+
+	// Create and return the response.
+	response := &pb.GetDataResponse{
+		TableNames: tableNames,
+	}
+	return response, nil
+}
+
 func (s MyQueryServiceServer) Query(ctx context.Context, req *pb.QueryRequest) (*pb.QueryResponse, error) {
 	// Open a connection to the database
 	db, err := sql.Open("mysql", "myuser:mypassword@tcp(db:3306)/mydb")
@@ -200,7 +237,13 @@ func main() {
 	logLine()
 	log.Println("Starting gRPC server...")
 
-	if err := s.Serve(lis); err != nil {
+	server := grpc.NewServer()
+	// Creat an instance of the Query service
+	MyQueryService := &MyQueryServiceServer{}
+	// Registering the Query service
+	pb.RegisterQueryServiceServer(server, MyQueryService)
+
+	if err := server.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)
 	}
 

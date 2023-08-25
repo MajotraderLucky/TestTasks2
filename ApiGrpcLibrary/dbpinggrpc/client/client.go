@@ -7,7 +7,7 @@ import (
 
 	pb "github.com/MajotraderLucky/TestTasks2/Repo/protobuf"
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
 func createLogsDirectory() error {
@@ -52,11 +52,8 @@ func main() {
 
 	log.Println("Starting grpc client")
 
-	// Creat unprotected credentials
-	creds := credentials.NewTLS(nil)
-
 	// Establish a connection to the gRPC server.
-	conn, err := grpc.Dial("grpc:50051", grpc.WithTransportCredentials(creds))
+	conn, err := grpc.Dial("localhost:50051", grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}
@@ -66,12 +63,11 @@ func main() {
 	client := pb.NewQueryServiceClient(conn)
 
 	// Call the remote getData method.
-	resp, err := client.GetData(context.Background(), &pb.GetDataRequest{Id: "your_id"})
+	resp, err := client.GetData(context.Background(), &pb.GetDataRequest{DataId: "your_id"})
 	if err != nil {
 		log.Fatalf("could not greet: %v", err)
 	}
 
 	// Response processing
-	log.Printf("Response: %s", resp.Message)
-
+	log.Printf("Response: %s", resp.GetData())
 }

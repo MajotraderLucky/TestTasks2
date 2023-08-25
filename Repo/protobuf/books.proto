@@ -27,6 +27,7 @@ message GetDataRequest {
 
 message GetDataResponse {
   string data = 1;
+  repeated string table_names = 2;
 }
 
 message QueryRequest {
