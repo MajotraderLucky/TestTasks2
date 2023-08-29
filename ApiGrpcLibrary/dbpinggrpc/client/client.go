@@ -69,5 +69,5 @@ func main() {
 	}
 
 	// Response processing
-	log.Printf("Response: %s", resp.GetData())
+	log.Printf("Response: %v", resp.GetTableNames())
 }
