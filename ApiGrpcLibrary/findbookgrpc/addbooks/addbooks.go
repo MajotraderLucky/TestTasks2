@@ -97,37 +97,6 @@ func readTableAuthors() {
 	}
 }
 
-// func cleanBooksAndAuthors(authorID int) error {
-// 	db, err := sql.Open("mysql", "myuser:mypassword@tcp(localhost:3306)/mydb")
-// 	if err != nil {
-// 		log.Fatal(err)
-// 	}
-// 	defer db.Close()
-
-// 	tx, err := db.Begin()
-// 	if err != nil {
-// 		return err
-// 	}
-
-// 	_, err = tx.Exec("DELETE FROM books WHERE author_id = $1", authorID)
-// 	if err != nil {
-// 		tx.Rollback()
-// 		return err
-// 	}
-
-// 	_, err = tx.Exec("DELETE FROM authors WHERE author_id = $1", authorID)
-// 	if err != nil {
-// 		tx.Rollback()
-// 		return err
-// 	}
-
-// 	err = tx.Commit()
-// 	if err != nil {
-// 		return err
-// 	}
-// 	return nil
-// }
-
 func checkAuthors() bool {
 	db, err := sql.Open("mysql", "myuser:mypassword@tcp(db:3306)/mydb")
 	if err != nil {
