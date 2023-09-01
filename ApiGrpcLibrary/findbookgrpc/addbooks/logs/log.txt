@@ -1,3 +1,22 @@
 2023/09/01 02:21:53 -------------------------------------------------------
 2023/09/01 02:21:53 Start adding books and authors to the database
 2023/09/01 02:21:53 -------------------------------------------------------
+2023/09/01 07:31:13 -------------------------------------------------------
+2023/09/01 07:31:13 Start adding books and authors to the database
+2023/09/01 07:31:13 -------------------------------------------------------
+2023/09/01 07:31:13 Database connected successfully
+2023/09/01 07:31:13 There are tables in the database: authors
+2023/09/01 07:31:13 There are tables in the database: books
+2023/09/01 07:31:13 There are no authors in the database
+2023/09/01 07:31:13 There are no books in the database
+2023/09/01 07:31:13 The base is empty
+2023/09/01 07:31:13 Data inserted successfully
+2023/09/01 07:31:13 List of the books in the database:
+2023/09/01 07:31:13 ID: 2, Title: Руслан и Людмила, Author: 1
+2023/09/01 07:31:13 ID: 3, Title: Пиковая дама, Author: 1
+2023/09/01 07:31:13 ID: 4, Title: Война и мир, Author: 2
+2023/09/01 07:31:13 ID: 5, Title: Анна Каренина, Author: 2
+2023/09/01 07:31:13 ID: 6, Title: Преступление и наказание, Author: 3
+2023/09/01 07:31:13 ID: 7, Title: Братья Карамазовы, Author: 3
+2023/09/01 07:31:13 ID: 8, Title: Мастер и Маргарита, Author: 4
+2023/09/01 07:31:13 ID: 9, Title: Маленький принц, Author: 5

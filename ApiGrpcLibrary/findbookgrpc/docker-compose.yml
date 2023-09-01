@@ -11,6 +11,21 @@ services:
     networks:
       - mynetwork
 
+  addbook:
+    build:
+      context: ./addbooks
+      dockerfile: Dockerfile
+    ports:
+      - 8080:8080
+    depends_on:
+      - db
+    volumes:
+      - ./addbooks/logs:/app/logs
+    environment:
+      - TZ=Europe/Moscow
+    networks:
+      - mynetwork
+
 volumes:
   db_data:
 
