@@ -26,7 +26,7 @@ func (d *Database) Ping() error {
 	return nil
 }
 
-func (d *Database) takeTablesNames() error {
+func (d *Database) TakeTablesNames() error {
 	// Get a list database tables
 	rows, err := d.db.Query("SHOW TABLES")
 	if err != nil {
