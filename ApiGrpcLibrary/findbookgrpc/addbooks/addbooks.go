@@ -258,7 +258,7 @@ func main() {
 	log.Println("Database pinged successfully")
 	logger.LogLine()
 
-	takeTables()
+	// Take tables from the database
 
 	readTableAuthors()
 

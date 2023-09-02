@@ -26,15 +26,39 @@ func (d *Database) Ping() error {
 	return nil
 }
 
+// func (d *Database) takeTablesNames() error {
+// 	db, err := sql.Open("mysql", "myuser:mypassword@tcp(db:3306)/mydb")
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
+// 	// Get a list database tables
+// 	rows, err := db.Query("SHOW TABLES")
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
+// 	defer rows.Close()
+
+// 	// Read table names and write them to the log
+// 	for rows.Next() {
+// 		var tableName string
+// 		err := rows.Scan(&tableName)
+// 		if err != nil {
+// 			log.Fatal(err)
+// 		}
+// 		log.Println("There are tables in the database:", tableName)
+// 	}
+
+// 	if err = rows.Err(); err != nil {
+// 		log.Fatal(err)
+// 	}
+// 	return nil
+// }
+
 func (d *Database) takeTablesNames() error {
-	db, err := sql.Open("mysql", "myuser:mypassword@tcp(db:3306)/mydb")
-	if err != nil {
-		log.Fatal(err)
-	}
 	// Get a list database tables
-	rows, err := db.Query("SHOW TABLES")
+	rows, err := d.db.Query("SHOW TABLES")
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 	defer rows.Close()
 
@@ -43,13 +67,13 @@ func (d *Database) takeTablesNames() error {
 		var tableName string
 		err := rows.Scan(&tableName)
 		if err != nil {
-			log.Fatal(err)
+			return err
 		}
 		log.Println("There are tables in the database:", tableName)
 	}
 
 	if err = rows.Err(); err != nil {
-		log.Fatal(err)
+		return err
 	}
 	return nil
 }
