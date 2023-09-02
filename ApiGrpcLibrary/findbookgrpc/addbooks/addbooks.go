@@ -259,6 +259,11 @@ func main() {
 	logger.LogLine()
 
 	// Take tables from the database
+	err = db.TakeTablesNames()
+	if err != nil {
+		log.Fatal(err)
+	}
+	logger.LogLine()
 
 	readTableAuthors()
 
