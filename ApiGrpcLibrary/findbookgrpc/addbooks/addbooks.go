@@ -20,16 +20,21 @@ type Book struct {
 	Title string `json:"title"`
 }
 
-func connectToDatabase() (*sql.DB, error) {
-	db, err := sql.Open("mysql", "myuser:mypassword@tcp(db:3306)/mydb")
-	if err != nil {
-		return nil, err
-	}
-	return db, nil
+type Database struct {
+	db *sql.DB
 }
 
-func pingDatabase(db *sql.DB) error {
-	err := db.Ping()
+func (d *Database) Connect() error {
+	db, err := sql.Open("mysql", "myuser:mypassword@tcp(db:3306)/mydb")
+	if err != nil {
+		return err
+	}
+	d.db = db
+	return nil
+}
+
+func (d *Database) Ping() error {
+	err := d.db.Ping()
 	if err != nil {
 		return err
 	}
@@ -257,18 +262,22 @@ func main() {
 	log.Println("Start adding books and authors to the database")
 	logger.LogLine()
 
-	db, err := connectToDatabase()
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer db.Close()
-
-	err = pingDatabase(db)
+	// Database connection
+	db := Database{}
+	err = db.Connect()
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	log.Println("Database connected successfully")
+
+	// Database ping
+	err = db.Ping()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	log.Println("Database pinged successfully")
 
 	takeTables()
 
