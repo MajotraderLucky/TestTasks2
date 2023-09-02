@@ -7,6 +7,7 @@ import (
 	"log"
 	"os"
 
+	"github.com/MajotraderLucky/TestTasks2/Repo/dbaccess"
 	"github.com/MajotraderLucky/Utils/logger"
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -18,27 +19,6 @@ type Author struct {
 
 type Book struct {
 	Title string `json:"title"`
-}
-
-type Database struct {
-	db *sql.DB
-}
-
-func (d *Database) Connect() error {
-	db, err := sql.Open("mysql", "myuser:mypassword@tcp(db:3306)/mydb")
-	if err != nil {
-		return err
-	}
-	d.db = db
-	return nil
-}
-
-func (d *Database) Ping() error {
-	err := d.db.Ping()
-	if err != nil {
-		return err
-	}
-	return nil
 }
 
 func takeTables() {
@@ -263,12 +243,11 @@ func main() {
 	logger.LogLine()
 
 	// Database connection
-	db := Database{}
+	db := dbaccess.Database{}
 	err = db.Connect()
 	if err != nil {
 		log.Fatal(err)
 	}
-
 	log.Println("Database connected successfully")
 
 	// Database ping
@@ -276,8 +255,8 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-
 	log.Println("Database pinged successfully")
+	logger.LogLine()
 
 	takeTables()
 
