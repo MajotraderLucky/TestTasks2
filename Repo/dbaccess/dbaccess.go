@@ -81,3 +81,19 @@ func (d *Database) ReadTableAuthors() error {
 	}
 	return nil
 }
+
+func (d *Database) CheckAuthors() bool {
+	// Check the available data in the authors table
+	query := "SELECT COUNT(*) FROM authors"
+	var count int
+	err := d.db.QueryRow(query).Scan(&count)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	if count == 0 {
+		return false
+	} else {
+		return true
+	}
+}
