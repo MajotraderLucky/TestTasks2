@@ -49,3 +49,35 @@ func (d *Database) TakeTablesNames() error {
 	}
 	return nil
 }
+
+func (d *Database) ReadTableAuthors() error {
+	// Execute the SELECT * FROM authors request
+	query := "SELECT * FROM authors"
+	rows, err := d.db.Query(query)
+	if err != nil {
+		return err
+	}
+	defer rows.Close()
+
+	// Check the available data in the table
+	if !rows.Next() {
+		log.Println("There are no authors in the database")
+		return nil
+	}
+
+	// The output of the authors in the log
+	log.Println("The authors in the database:")
+	for rows.Next() {
+		var id int
+		var name string
+		err := rows.Scan(&id, &name)
+		if err != nil {
+			return err
+		}
+		log.Printf("ID: %d, Name: %s\n", id, name)
+	}
+	if err = rows.Err(); err != nil {
+		return err
+	}
+	return nil
+}
