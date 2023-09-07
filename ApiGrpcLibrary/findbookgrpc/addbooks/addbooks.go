@@ -21,40 +21,6 @@ type Book struct {
 	Title string `json:"title"`
 }
 
-func readTableAuthors() {
-	db, err := sql.Open("mysql", "myuser:mypassword@tcp(db:3306)/mydb")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer db.Close()
-
-	//  Execute the SELECT * FROM authors request
-	query := "SELECT * FROM authors"
-	rows, err := db.Query(query)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer rows.Close()
-
-	// Check the available data in the table
-	if !rows.Next() {
-		log.Println("There are no authors in the database")
-		return
-	}
-
-	// The output of the authors in the log
-	log.Println("The authors in the database:")
-	for rows.Next() {
-		var id int
-		var name string
-		err := rows.Scan(&id, &name)
-		if err != nil {
-			log.Fatal(err)
-		}
-		log.Printf("ID: %d, Name: %s\n", id, name)
-	}
-}
-
 func checkAuthors() bool {
 	db, err := sql.Open("mysql", "myuser:mypassword@tcp(db:3306)/mydb")
 	if err != nil {
@@ -238,7 +204,12 @@ func main() {
 	}
 	logger.LogLine()
 
-	readTableAuthors()
+	// Read table authors
+	err = db.ReadTableAuthors()
+	if err != nil {
+		log.Fatal(err)
+	}
+	logger.LogLine()
 
 	readTableBooks()
 

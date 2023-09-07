@@ -59,9 +59,9 @@ func (d *Database) ReadTableAuthors() error {
 	}
 	defer rows.Close()
 
-	// Check the available data in the table
+	// Check if the table is empty
 	if !rows.Next() {
-		log.Println("There are no authors in the database")
+		log.Println("The authors table is empty")
 		return nil
 	}
 
