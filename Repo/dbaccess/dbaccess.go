@@ -66,9 +66,9 @@ func (d *Database) CheckAuthors() bool {
 	}
 }
 
-func (d *Database) ReadTableAuthor() error {
+func (d *Database) ReadTableAuthors() error {
 	// Output header for the start function
-	log.Println("-----------Starting the function ReadTableAuthorUncheck-----------")
+	log.Println("-----------Starting the function ReadTableAuthors-----------")
 	// Execute the SELECT * FROM authors request
 	query := "SELECT * FROM authors"
 	rows, err := d.db.Query(query)
@@ -92,6 +92,6 @@ func (d *Database) ReadTableAuthor() error {
 		return err
 	}
 	// Output footer for the finished function
-	log.Println("-----------Finished the function ReadTableAuthorUncheck-----------")
+	log.Println("-----------Finished the function ReadTableAuthors-----------")
 	return nil
 }
