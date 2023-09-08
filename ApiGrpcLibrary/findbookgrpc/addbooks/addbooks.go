@@ -182,10 +182,16 @@ func main() {
 	}
 	logger.LogLine()
 
-	// Read table authors without chekking for an empty table
-	err = db.ReadTableAuthors()
-	if err != nil {
-		log.Fatal(err)
+	// Check table authors
+	if db.CheckAuthors() {
+		// If the authors table is not empty, call the function ReadTableAuthors
+		err = db.ReadTableAuthors()
+		if err != nil {
+			log.Fatal(err)
+		}
+	} else {
+		// If the authors table is empty, we output a message
+		log.Println("There are no authors in the database")
 	}
 
 	readTableBooks()
