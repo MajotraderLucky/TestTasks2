@@ -50,38 +50,6 @@ func (d *Database) TakeTablesNames() error {
 	return nil
 }
 
-func (d *Database) ReadTableAuthors() error {
-	// Execute the SELECT * FROM authors request
-	query := "SELECT * FROM authors"
-	rows, err := d.db.Query(query)
-	if err != nil {
-		return err
-	}
-	defer rows.Close()
-
-	// Check if the table is empty
-	if !rows.Next() {
-		log.Println("The authors table is empty")
-		return nil
-	}
-
-	// The output of the authors in the log
-	log.Println("The authors in the database:")
-	for rows.Next() {
-		var id int
-		var name string
-		err := rows.Scan(&id, &name)
-		if err != nil {
-			return err
-		}
-		log.Printf("ID: %d, Name: %s\n", id, name)
-	}
-	if err = rows.Err(); err != nil {
-		return err
-	}
-	return nil
-}
-
 func (d *Database) CheckAuthors() bool {
 	// Check the available data in the authors table
 	query := "SELECT COUNT(*) FROM authors"
@@ -98,7 +66,7 @@ func (d *Database) CheckAuthors() bool {
 	}
 }
 
-func (d *Database) ReadTableAuthorUncheck() error {
+func (d *Database) ReadTableAuthor() error {
 	// Output header for the start function
 	log.Println("-----------Starting the function ReadTableAuthorUncheck-----------")
 	// Execute the SELECT * FROM authors request
