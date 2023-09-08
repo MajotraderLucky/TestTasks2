@@ -97,3 +97,33 @@ func (d *Database) CheckAuthors() bool {
 		return true
 	}
 }
+
+func (d *Database) ReadTableAuthorUncheck() error {
+	// Output header for the start function
+	log.Println("-----------Starting the function ReadTableAuthorUncheck-----------")
+	// Execute the SELECT * FROM authors request
+	query := "SELECT * FROM authors"
+	rows, err := d.db.Query(query)
+	if err != nil {
+		return err
+	}
+	defer rows.Close()
+
+	// The output of the authors in the log
+	log.Println("The authors in the database:")
+	for rows.Next() {
+		var id int
+		var name string
+		err := rows.Scan(&id, &name)
+		if err != nil {
+			return err
+		}
+		log.Printf("ID: %d, Name: %s\n", id, name)
+	}
+	if err = rows.Err(); err != nil {
+		return err
+	}
+	// Output footer for the finished function
+	log.Println("-----------Finished the function ReadTableAuthorUncheck-----------")
+	return nil
+}
