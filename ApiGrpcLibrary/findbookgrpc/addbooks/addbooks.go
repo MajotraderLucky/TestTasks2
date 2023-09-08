@@ -182,15 +182,8 @@ func main() {
 	}
 	logger.LogLine()
 
-	// Read table authors
-	err = db.ReadTableAuthors()
-	if err != nil {
-		log.Fatal(err)
-	}
-	logger.LogLine()
-
 	// Read table authors without chekking for an empty table
-	err = db.ReadTableAuthorUncheck()
+	err = db.ReadTableAuthor()
 	if err != nil {
 		log.Fatal(err)
 	}
