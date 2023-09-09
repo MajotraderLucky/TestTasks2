@@ -66,6 +66,22 @@ func (d *Database) CheckAuthors() bool {
 	}
 }
 
+func (d *Database) CheckBooks() bool {
+	// Check the available data in the books table
+	query := "SELECT COUNT(*) FROM books"
+	var count int
+	err := d.db.QueryRow(query).Scan(&count)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	if count == 0 {
+		return false
+	} else {
+		return true
+	}
+}
+
 func (d *Database) ReadTableAuthors() error {
 	// Output header for the start function
 	log.Println("-----------Starting the function ReadTableAuthors-----------")
