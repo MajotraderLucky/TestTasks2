@@ -21,28 +21,6 @@ type Book struct {
 	Title string `json:"title"`
 }
 
-func checkBooks() bool {
-	db, err := sql.Open("mysql", "myuser:mypassword@tcp(db:3306)/mydb")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer db.Close()
-
-	// Check the available data in the table
-	query := "SELECT COUNT(*) FROM books"
-	var count int
-	err = db.QueryRow(query).Scan(&count)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	if count == 0 {
-		return false
-	} else {
-		return true
-	}
-}
-
 func addAuthorsAndBooks() {
 	db, err := sql.Open("mysql", "myuser:mypassword@tcp(db:3306)/mydb")
 	if err != nil {
@@ -159,16 +137,24 @@ func main() {
 		log.Println("There are no authors in the database")
 	}
 
-	// Output a list of the books to the logs
-	err = db.ReadTableBooks()
-	if err != nil {
-		log.Fatal(err)
+	// Check table books
+	if db.CheckBooks() {
+		// If the books table is not empty, call the function ReadTableBooks
+		err = db.ReadTableBooks()
+		if err != nil {
+			log.Fatal(err)
+		}
+	} else {
+		// If the books table is empty, we output a message
+		log.Println("There are no books in the database")
 	}
 
-	if !db.CheckAuthors() && !checkBooks() {
+	if !db.CheckAuthors() && !db.CheckBooks() {
 		log.Println("The base is empty")
 		addAuthorsAndBooks()
 	}
+
+	logger.LogLine()
 
 	logger.CleanLog()
 }
