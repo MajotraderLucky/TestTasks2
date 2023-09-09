@@ -95,3 +95,34 @@ func (d *Database) ReadTableAuthors() error {
 	log.Println("-----------Finished the function ReadTableAuthors-----------")
 	return nil
 }
+
+func (d *Database) ReadTableBooks() error {
+	// Output header for the start function
+	log.Println("-----------Starting the function ReadTableBooks-----------")
+	// Execute the SELECT * FROM books request
+	query := "SELECT * FROM books"
+	rows, err := d.db.Query(query)
+	if err != nil {
+		return err
+	}
+	defer rows.Close()
+
+	// The output of the books in the log
+	log.Println("The books in the database:")
+	for rows.Next() {
+		var id int
+		var title string
+		var author int
+		err := rows.Scan(&id, &title, &author)
+		if err != nil {
+			return err
+		}
+		log.Printf("ID: %d, Title: %s, Author: %d\n", id, title, author)
+	}
+	if err = rows.Err(); err != nil {
+		return err
+	}
+	// Output footer for the finished function
+	log.Println("-----------Finished the function ReadTableBooks-----------")
+	return nil
+}
