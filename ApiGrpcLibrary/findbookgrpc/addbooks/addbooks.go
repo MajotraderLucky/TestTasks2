@@ -21,41 +21,6 @@ type Book struct {
 	Title string `json:"title"`
 }
 
-func readTableBooks() {
-	db, err := sql.Open("mysql", "myuser:mypassword@tcp(db:3306)/mydb")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer db.Close()
-
-	// Execute the SELECT * FROM books
-	query := "SELECT * FROM books"
-	rows, err := db.Query(query)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer rows.Close()
-
-	// Check the available data in the table
-	if !rows.Next() {
-		log.Println("There are no books in the database")
-		return
-	}
-
-	// Output of the book titles in the log
-	log.Println("List of the books in the database:")
-	for rows.Next() {
-		var id int
-		var title string
-		var author string
-		err := rows.Scan(&id, &title, &author)
-		if err != nil {
-			log.Fatal(err)
-		}
-		log.Printf("ID: %d, Title: %s, Author: %s\n", id, title, author)
-	}
-}
-
 func checkBooks() bool {
 	db, err := sql.Open("mysql", "myuser:mypassword@tcp(db:3306)/mydb")
 	if err != nil {
@@ -194,14 +159,16 @@ func main() {
 		log.Println("There are no authors in the database")
 	}
 
-	readTableBooks()
+	// Output a list of the books to the logs
+	err = db.ReadTableBooks()
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	if !db.CheckAuthors() && !checkBooks() {
 		log.Println("The base is empty")
 		addAuthorsAndBooks()
 	}
-
-	readTableBooks()
 
 	logger.CleanLog()
 }
