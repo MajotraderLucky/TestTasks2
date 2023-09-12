@@ -1,11 +1,8 @@
 package main
 
 import (
-	"database/sql"
-	"encoding/json"
 	"fmt"
 	"log"
-	"os"
 
 	"github.com/MajotraderLucky/TestTasks2/Repo/dbaccess"
 	"github.com/MajotraderLucky/Utils/logger"
@@ -19,71 +16,6 @@ type Author struct {
 
 type Book struct {
 	Title string `json:"title"`
-}
-
-func addAuthorsAndBooks() {
-	db, err := sql.Open("mysql", "myuser:mypassword@tcp(db:3306)/mydb")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer db.Close()
-
-	initSQL :=
-		`CREATE TABLE IF NOT EXISTS authors (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-	name VARCHAR(255)
-	);`
-
-	_, err = db.Exec(initSQL)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	initSQL2 :=
-		`CREATE TABLE IF NOT EXISTS books (
-	id INT AUTO_INCREMENT PRIMARY KEY,
-  title VARCHAR(255),
-  author_id INT,
-	FOREIGN KEY (author_id) REFERENCES authors(id)
-	);`
-
-	_, err = db.Exec(initSQL2)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	file, err := os.ReadFile("books.json")
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	var authors []Author
-	err = json.Unmarshal(file, &authors)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	for _, author := range authors {
-		insertAuthorSQL := "INSERT INTO authors (name) VALUES (?)"
-		result, err := db.Exec(insertAuthorSQL, author.Name)
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		authorID, err := result.LastInsertId()
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		for _, book := range author.Books {
-			insertBookSQL := "INSERT INTO books (title, author_id) VALUES (?,?)"
-			_, err := db.Exec(insertBookSQL, book, authorID)
-			if err != nil {
-				log.Fatal(err)
-			}
-		}
-	}
-	log.Println("Data inserted successfully")
 }
 
 func main() {
@@ -151,7 +83,10 @@ func main() {
 
 	if !db.CheckAuthors() && !db.CheckBooks() {
 		log.Println("The base is empty")
-		addAuthorsAndBooks()
+		err = db.AddAuthorsAndBooks()
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
 
 	logger.LogLine()
