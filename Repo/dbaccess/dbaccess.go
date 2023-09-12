@@ -2,11 +2,22 @@ package dbaccess
 
 import (
 	"database/sql"
+	"encoding/json"
 	"log"
+	"os"
 )
 
 type Database struct {
 	db *sql.DB
+}
+
+type Author struct {
+	Name  string   `json:"name"`
+	Books []string `json:"books"`
+}
+
+type Book struct {
+	Title string `json:"title"`
 }
 
 func (d *Database) Connect() error {
@@ -140,5 +151,65 @@ func (d *Database) ReadTableBooks() error {
 	}
 	// Output footer for the finished function
 	log.Println("-----------Finished the function ReadTableBooks-----------")
+	return nil
+}
+
+func (d *Database) AddAuthorsAndBooks() error {
+	// Output header for the start function
+	log.Println("-----------Starting the function addAuthorsAndBooks-----------")
+	initSQL :=
+		`CREATE TABLE IF NOT EXISTS authors (
+		id INT AUTO_INCREMENT PRIMARY KEY,
+		name VARCHAR(255)
+	);`
+	_, err := d.db.Exec(initSQL)
+	if err != nil {
+		return err
+	}
+
+	initSQL2 :=
+		`CREATE TABLE IF NOT EXISTS books (
+			id INT AUTO_INCREMENT PRIMARY KEY,
+			title VARCHAR(255),
+			author_id INT,
+			FOREIGN KEY (author_id) REFERENCES authors(id)
+			);`
+
+	_, err = d.db.Exec(initSQL2)
+	if err != nil {
+		return err
+	}
+
+	file, err := os.ReadFile("books.json")
+	if err != nil {
+		return err
+	}
+	var authors []Author
+	err = json.Unmarshal(file, &authors)
+	if err != nil {
+		return err
+	}
+
+	for _, author := range authors {
+		insertAuthorSQL := "INSERT INTO authors (name) VALUES (?)"
+		result, err := d.db.Exec(insertAuthorSQL, author.Name)
+		if err != nil {
+			return err
+		}
+		authorID, err := result.LastInsertId()
+		if err != nil {
+			return err
+		}
+		for _, book := range author.Books {
+			insertBookSQL := "INSERT INTO books (title, author_id) VALUES (?,?)"
+			_, err := d.db.Exec(insertBookSQL, book, authorID)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	log.Println("Data inserted successfully")
+	// Output footer for the finished function
+	log.Println("-----------Finished the function addAuthorsAndBooks-----------")
 	return nil
 }
