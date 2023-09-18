@@ -26,6 +26,21 @@ services:
     networks:
       - mynetwork
 
+  grpc:
+    build:
+      context: ./servergrpc
+      dockerfile: Dockerfile
+    ports:
+      - 50051:50051
+    volumes:
+      - ./servergrpc/logs:/app/logs
+    environment:
+      - TZ=Europe/Moscow
+    depends_on:
+      - addbook
+    networks:
+      - mynetwork
+
 volumes:
   db_data:
 

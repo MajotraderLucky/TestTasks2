@@ -8,8 +8,6 @@ import (
 )
 
 func main() {
-	fmt.Println("Hello, Server gRPC!")
-
 	// Connect the logger package and make an entry in the log.
 	logger := logger.Logger{}
 	err := logger.CreateLogsDir()
