@@ -5,11 +5,13 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"net"
 	"strconv"
 
 	pb "github.com/MajotraderLucky/TestTasks2/Repo/protobuf"
 	"github.com/MajotraderLucky/Utils/logger"
 	_ "github.com/go-sql-driver/mysql"
+	"google.golang.org/grpc"
 )
 
 type MyQueryServiceServer struct {
@@ -127,7 +129,7 @@ func main() {
 	logger.SetLogger()
 	logger.LogLine()
 
-	log.Println("Hello, Server gRPC!")
+	log.Println("Starting gRPC server...")
 
 	// Connect to the database.
 	db, err := sql.Open("mysql", "myuser:mypassword@tcp(db:3306)/mydb")
@@ -135,4 +137,88 @@ func main() {
 		log.Fatal(err)
 	}
 	defer db.Close()
+
+	log.Println("Connecting to the database...")
+
+	// Create a new server gRPC
+	lis, err := net.Listen("tcp", ":50051")
+	if err != nil {
+		log.Fatalf("failed to listen: %v", err)
+	}
+	log.Println("Server listening on port 50051...")
+
+	s := grpc.NewServer()
+
+	// Ping to the database.
+	logger.LogLine()
+	log.Println("Pinging to the database...")
+	_, err = db.Exec("SELECT 1")
+	if err != nil {
+		log.Fatal(err)
+	}
+	logger.LogLine()
+	log.Println("Database pinged successfully!")
+
+	// Get table names from the database and write them
+	// to the slice of table names.
+	logger.LogLine()
+	log.Println("Getting table names from the database...")
+	rows, err := db.Query("SHOW TABLES")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer rows.Close()
+
+	var tableNames []string
+	for rows.Next() {
+		var tableName string
+		if err := rows.Scan(&tableName); err != nil {
+			log.Fatal(err)
+		}
+		tableNames = append(tableNames, tableName)
+	}
+	logger.LogLine()
+	log.Println("Got table names:", tableNames)
+
+	pb.RegisterQueryServiceServer(s, &MyQueryServiceServer{})
+
+	// Print in the log file to the slice of table names.
+	logger.LogLine()
+	tableName := tableNames[0]
+	log.Println("Getting data from the table:", tableName)
+	rows, err = db.Query("SELECT * FROM " + tableName)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer rows.Close()
+
+	var data [][]string
+	for rows.Next() {
+		var id int
+		var name string
+		if err := rows.Scan(&id, &name); err != nil {
+			log.Fatal(err)
+		}
+		data = append(data, []string{strconv.Itoa(id), name})
+	}
+	logger.LogLine()
+	log.Println("Got data from the table:", tableName)
+	logger.LogLine()
+	log.Println(data)
+
+	// Start the gRPC server.
+	logger.LogLine()
+	logger.LogLine()
+	log.Println("Starting gRPC server...")
+
+	server := grpc.NewServer()
+	// Create an instance of the Query service.
+	MyQueryService := &MyQueryServiceServer{}
+	// Registering the Query service.
+	pb.RegisterQueryServiceServer(server, MyQueryService)
+
+	if err := server.Serve(lis); err != nil {
+		log.Fatalf("failed to serve: %v", err)
+	}
+	log.Println("gRPC server stopped")
 }
