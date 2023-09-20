@@ -3,7 +3,9 @@ package main
 import (
 	"context"
 	"database/sql"
+	"fmt"
 	"log"
+	"strconv"
 
 	pb "github.com/MajotraderLucky/TestTasks2/Repo/protobuf"
 	"github.com/MajotraderLucky/Utils/logger"
@@ -46,6 +48,67 @@ func (s *MyQueryServiceServer) GetData(ctx context.Context, request *pb.GetDataR
 	// Create and return the response.
 	response := &pb.GetDataResponse{
 		TableNames: tableNames,
+	}
+	return response, nil
+}
+
+func (s *MyQueryServiceServer) Query(ctx context.Context, request *pb.QueryRequest) (*pb.QueryResponse, error) {
+	// Open a connection to the database.
+	db, err := sql.Open("mysql", "myuser:mypassword@tcp(db:3306)/mydb")
+	if err != nil {
+		return nil, err
+	}
+	defer db.Close()
+
+	// Execute a mysql query.
+	rows, err := db.Query(request.Sql)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	// Forming a mysql response
+	result := make(map[string]*pb.Value)
+	columns, err := rows.Columns()
+	if err != nil {
+		return nil, err
+	}
+	values := make([]interface{}, len(columns))
+	valuePtrs := make([]interface{}, len(columns))
+	for i := range columns {
+		valuePtrs[i] = &values[i]
+	}
+	for rows.Next() {
+		err := rows.Scan(valuePtrs...)
+		if err != nil {
+			return nil, err
+		}
+		rowResult := make(map[string]*pb.Value)
+		for i, col := range columns {
+			rowResult[col] = &pb.Value{
+				Value: &pb.Value_StringValue{
+					StringValue: fmt.Sprintf("%v", values[i])},
+			}
+		}
+		result := make(map[string]*pb.Value)
+		for rows.Next() {
+			var rowResult string
+			if err := rows.Scan(&rowResult); err != nil {
+				return nil, err
+			}
+			result[strconv.Itoa(len(result))] = &pb.Value{
+				Value: &pb.Value_StringValue{
+					StringValue: rowResult,
+				},
+			}
+		}
+		if err := rows.Err(); err != nil {
+			return nil, err
+		}
+	}
+	// Creating an instance of pb.QueryResponse and filling it with data
+	response := &pb.QueryResponse{
+		Results: result,
 	}
 	return response, nil
 }
